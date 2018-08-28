@@ -21,6 +21,7 @@ struct kJavaBoolean : JNIBindingBase {};
 struct kJavaInteger : JNIBindingBase {};
 struct kJavaLocale : JNIBindingBase {};
 struct kAndroidSharedPreferences : JNIBindingBase {};
+struct kAndroidSharedPreferencesEditor : JNIBindingBase {};
 struct kAndroidContextCompat : JNIBindingBase {};
 struct kJavaFile : JNIBindingBase {};
 struct kJavaHashMap : JNIBindingBase {};
@@ -84,6 +85,23 @@ JNI_CLASS_BEGIN_IMPL(kAndroidRectF, "android/graphics/RectF", JNIClassTraits<kJa
 JNI_CLASS_END()
 
 // ----------------------------------------------------------------------------
+// android.graphics.Rect
+// ----------------------------------------------------------------------------
+JNI_CLASS_BEGIN(kAndroidRect, "android/graphics/Rect")
+JNI_CTOR(ctor, "(IIII)V")
+JNI_CTOR_RAW(ctorRaw, "(IIII)V")
+JNI_FIELD(left, "I", int)
+JNI_FIELD(top, "I", int)
+JNI_FIELD(right, "I", int)
+JNI_FIELD(bottom, "I", int)
+JNI_METHOD(set, "(IIII)V", void)
+JNI_METHOD(width, "()I", int)
+JNI_METHOD(height, "()I", int)
+JNI_METHOD(exactCenterX, "()F", float)
+JNI_METHOD(exactCenterY, "()F", float)
+JNI_CLASS_END()
+
+// ----------------------------------------------------------------------------
 // java.lang.Boolean
 // ----------------------------------------------------------------------------
 JNI_CLASS_BEGIN_IMPL(kJavaBoolean, "java/lang/Boolean", JNIClassTraits<kJavaObject>)
@@ -123,6 +141,25 @@ JNI_CLASS_END()
 JNI_CLASS_BEGIN(kAndroidSharedPreferences, "android/content/SharedPreferences")
   JNI_METHOD(getInt, "(Ljava/lang/String;I)I", int)
   JNI_METHOD(getString, "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;", std::string)
+  JNI_METHOD(getFloat, "(Ljava/lang/String;F)F", float)
+  JNI_METHOD(getBoolean, "(Ljava/lang/String;Z)Z", bool)
+  JNI_METHOD(getLong, "(Ljava/lang/String;J)J", long)
+  JNI_METHOD(edit, "()Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
+JNI_CLASS_END()
+
+// ----------------------------------------------------------------------------
+// android.content.SharedPreferences$Editor
+// ----------------------------------------------------------------------------
+JNI_CLASS_BEGIN(kAndroidSharedPreferencesEditor, "android/content/SharedPreferences$Editor")
+JNI_METHOD(apply, "()V", void)
+JNI_METHOD(commit, "()Z", bool)
+JNI_METHOD(clear, "()Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
+JNI_METHOD(putBoolean, "(Ljava/lang/String;Z)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
+JNI_METHOD(putFloat, "(Ljava/lang/String;F)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
+JNI_METHOD(putInt, "(Ljava/lang/String;I)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
+JNI_METHOD(putLong, "(Ljava/lang/String;J)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
+JNI_METHOD(putString, "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
+JNI_METHOD(remove, "(Ljava/lang/String;)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
 JNI_CLASS_END()
 
 
@@ -152,7 +189,10 @@ JNI_CLASS_END()
 JNI_CLASS_BEGIN_IMPL(kJavaHashMap, "java/util/HashMap", JNIClassTraits<kJavaObject>)
   JNI_CTOR(ctor, "()V")
   JNI_CTOR(ctor2, "(I)V")
+  JNI_METHOD(isEmpty, "()Z", bool)
+  JNI_METHOD(size, "()I", int)
   JNI_METHOD(put, "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", JNIAutoUnref<jobject>)
+  JNI_METHOD(get, "(Ljava/lang/Object;)Ljava/lang/Object;", JNIAutoUnref<jobject>)
 JNI_CLASS_END()
 
 // ----------------------------------------------------------------------------
