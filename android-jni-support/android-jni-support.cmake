@@ -186,7 +186,6 @@ add_library(
     ${LIBRARY_SRC_DIR}/jni_exceptions.cpp
     ${LIBRARY_SRC_DIR}/jni_value_adapter.cpp
     ${LIBRARY_SRC_DIR}/jni_file_manager.cpp
-    ${LIBRARY_SRC_DIR}/main.cpp
 )
 
 set_target_properties(

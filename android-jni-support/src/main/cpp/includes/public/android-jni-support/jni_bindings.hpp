@@ -27,6 +27,7 @@ struct kJavaFile : JNIBindingBase {};
 struct kJavaHashMap : JNIBindingBase {};
 struct kAndroidEnvironment : JNIBindingBase {};
 struct kJavaThread : JNIBindingBase {};
+struct kJavaObservable : JNIBindingBase {};
 
 // definitions
 
@@ -88,17 +89,17 @@ JNI_CLASS_END()
 // android.graphics.Rect
 // ----------------------------------------------------------------------------
 JNI_CLASS_BEGIN(kAndroidRect, "android/graphics/Rect")
-JNI_CTOR(ctor, "(IIII)V")
-JNI_CTOR_RAW(ctorRaw, "(IIII)V")
-JNI_FIELD(left, "I", int)
-JNI_FIELD(top, "I", int)
-JNI_FIELD(right, "I", int)
-JNI_FIELD(bottom, "I", int)
-JNI_METHOD(set, "(IIII)V", void)
-JNI_METHOD(width, "()I", int)
-JNI_METHOD(height, "()I", int)
-JNI_METHOD(exactCenterX, "()F", float)
-JNI_METHOD(exactCenterY, "()F", float)
+  JNI_CTOR(ctor, "(IIII)V")
+  JNI_CTOR_RAW(ctorRaw, "(IIII)V")
+  JNI_FIELD(left, "I", int)
+  JNI_FIELD(top, "I", int)
+  JNI_FIELD(right, "I", int)
+  JNI_FIELD(bottom, "I", int)
+  JNI_METHOD(set, "(IIII)V", void)
+  JNI_METHOD(width, "()I", int)
+  JNI_METHOD(height, "()I", int)
+  JNI_METHOD(exactCenterX, "()F", float)
+  JNI_METHOD(exactCenterY, "()F", float)
 JNI_CLASS_END()
 
 // ----------------------------------------------------------------------------
@@ -151,15 +152,15 @@ JNI_CLASS_END()
 // android.content.SharedPreferences$Editor
 // ----------------------------------------------------------------------------
 JNI_CLASS_BEGIN(kAndroidSharedPreferencesEditor, "android/content/SharedPreferences$Editor")
-JNI_METHOD(apply, "()V", void)
-JNI_METHOD(commit, "()Z", bool)
-JNI_METHOD(clear, "()Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
-JNI_METHOD(putBoolean, "(Ljava/lang/String;Z)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
-JNI_METHOD(putFloat, "(Ljava/lang/String;F)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
-JNI_METHOD(putInt, "(Ljava/lang/String;I)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
-JNI_METHOD(putLong, "(Ljava/lang/String;J)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
-JNI_METHOD(putString, "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
-JNI_METHOD(remove, "(Ljava/lang/String;)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
+  JNI_METHOD(apply, "()V", void)
+  JNI_METHOD(commit, "()Z", bool)
+  JNI_METHOD(clear, "()Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
+  JNI_METHOD(putBoolean, "(Ljava/lang/String;Z)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
+  JNI_METHOD(putFloat, "(Ljava/lang/String;F)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
+  JNI_METHOD(putInt, "(Ljava/lang/String;I)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
+  JNI_METHOD(putLong, "(Ljava/lang/String;J)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
+  JNI_METHOD(putString, "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
+  JNI_METHOD(remove, "(Ljava/lang/String;)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
 JNI_CLASS_END()
 
 
@@ -208,6 +209,20 @@ JNI_CLASS_END()
 JNI_CLASS_BEGIN(kJavaThread, "java/lang/Thread")
   JNI_STATIC_METHOD(currentThread, "()Ljava/lang/Thread;", JNIAutoUnref<jobject>)
   JNI_METHOD(setName, "(Ljava/lang/String;)V", void)
+JNI_CLASS_END()
+
+
+// ----------------------------------------------------------------------------
+// java.util.Observable
+// ----------------------------------------------------------------------------
+JNI_CLASS_BEGIN(kJavaObservable, "java/util/Observable")
+  JNI_CTOR(ctor, "()V")
+  JNI_METHOD(notifyObservers, "()V", void)
+  JNI_METHOD(setChanged, "()V", void)
+  JNI_METHOD(clearChanged, "()V", void)
+  JNI_METHOD(hasChanged, "()Z", bool)
+  JNI_METHOD(countObservers, "()I", int)
+  JNI_METHOD2(notifyObserversWithObject, notifyObservers, "(Ljava/lang/Object;)V", void)
 JNI_CLASS_END()
 
 ANDROID_JNI_NAMESPACE_END_DECL

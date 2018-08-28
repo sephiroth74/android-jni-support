@@ -8,17 +8,24 @@ add_library(
     SHARED
     src/main/cpp/native-lib.cpp
     src/main/cpp/android_unittest.cc
+    src/main/cpp/shared_preferences_unittest.cc
 )
 
 find_library(log-lib log)
 find_library(android-lib android)
 
-add_library(android-jni-support STATIC IMPORTED)
-set_target_properties(
-    android-jni-support
-    PROPERTIES IMPORTED_LOCATION
-    ${CMAKE_CURRENT_LIST_DIR}/../android-jni-support/lib/${CMAKE_BUILD_TYPE}/${ANDROID_ABI}/libandroid-jni-support.a
+
+# ------------------------------
+# android-jni-support
+# ------------------------------
+
+set(
+    ANDROID_JNI_SUPPORT_BASE_DIR
+    ${CMAKE_CURRENT_LIST_DIR}/../android-jni-support
 )
+
+include(${ANDROID_JNI_SUPPORT_BASE_DIR}/android-jni-support.cmake)
+
 
 # ------------------------------
 # Google Test

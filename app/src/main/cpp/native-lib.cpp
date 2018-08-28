@@ -5,6 +5,8 @@
 #include <android-jni-support/jni_context.hpp>
 #include <android-jni-support/jni_thread.hpp>
 
+#include <thread>
+
 #include "gtest/gtest.h"
 #include "android_unittest.hpp"
 
@@ -26,8 +28,9 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     result = JNI_VERSION_1_6;
 
 
-    // mandatory initialization
+    // (MANDATORY-1) initialization of the vm
     JNI::set_vm(vm);
+
     // this must be called on the android UI thread
     JNIThread::set_ui_thread(std::this_thread::get_id());
 
@@ -40,32 +43,55 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     return result;
 }
 
+void runAllTests() {
+
+}
 
 extern "C" {
 
 JNIEXPORT
-void Java_it_sephiroth_android_1jni_1support_Library_initializeLibrary(JNIEnv *env,
-                                                                       jclass clazz,
-                                                                       jobject context,
-                                                                       jobject class_loader) {
+void Java_it_sephiroth_androidjnisupport_GTestRunner_initialize(JNIEnv *env,
+                                                                jclass clazz,
+                                                                jobject context,
+                                                                jobject class_loader) {
 
-    __android_log_print(ANDROID_LOG_INFO, "native-lib", "initializeLibrary");
+    // (MANDATORY-2) set the current class loader
     JNIContext::set_class_loader(class_loader);
+    // (MANDATORY-3) set the application context
     JNIContext::set_context(context);
+
     JNIThread::set_name("android-ui-thread");
 
 
-    // GTests
-
+    // Prepare GTests
     TestContainer::context.set(context);
+}
 
-    int argc[1] = {1};
-    char **argv = new char *[*argc + 1];
-    argv[0] = "--gtest_also_run_disabled_tests";
-    ::testing::InitGoogleTest(argc, argv);
-    auto result = RUN_ALL_TESTS();
+JNIEXPORT
+void Java_it_sephiroth_androidjnisupport_GTestRunner_runTests(JNIEnv *env,
+                                                              jobject clazz,
+                                                              jobject observable) {
 
-    LOGE("test result: %d", result);
+    JNIGlobalRef<jobject> observableRef{observable};
+
+    LOGI("runTests...");
+    JNIClass<kJavaObservable>::instance().setChanged(env, observable);
+
+    new std::thread([_observable = JNIGlobalRef<jobject>(observableRef.obj())] {
+      JNIThread::set_name("gtest-thread");
+      AutoDetachThread auto_thread;
+
+      sleep(2);
+
+      int argc[1] = {1};
+      char **argv = new char *[*argc + 1];
+      argv[0] = const_cast<char *>("--gtest_also_run_disabled_tests");
+      ::testing::InitGoogleTest(argc, argv);
+      auto result = RUN_ALL_TESTS();
+      LOGV("result: %d", result);
+
+      JNI_INSTANCE(kJavaObservable).notifyObserversWithObject(JNI::env(), _observable.obj(), java_boxed(result).obj());
+    });
 
 }
 
