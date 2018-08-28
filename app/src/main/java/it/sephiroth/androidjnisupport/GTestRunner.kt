@@ -2,7 +2,12 @@ package it.sephiroth.androidjnisupport
 
 import android.content.Context
 import android.util.Log
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileInputStream
+import java.io.InputStreamReader
 import java.util.*
+
 
 //
 //  ADOBE CONFIDENTIAL
@@ -22,8 +27,14 @@ import java.util.*
 //
 
 open class GTestRunner {
+    var outputFile: File? = null
 
     constructor(context: Context, classLoader: ClassLoader) {
+        val output_dir = File(context.filesDir, "gtest")
+        if (!output_dir.exists()) output_dir.mkdirs()
+        outputFile = File(output_dir, "test-results.xml")
+        outputFile!!.createNewFile()
+
         initialize(context, classLoader)
     }
 
@@ -32,9 +43,19 @@ open class GTestRunner {
         observable.addObserver { _, value ->
             Log.d("test", "observer notified with value: $value")
 
+            val input = FileInputStream(outputFile)
+            val reader = BufferedReader(InputStreamReader(input))
+            val sb = StringBuilder()
+            var line: String? = reader.readLine()
+            while (line != null) {
+                sb.append(line).append("\n")
+                Log.v("gtest", line)
+                line = reader.readLine()
+            }
+            reader.close()
         }
 
-        runTests(observable)
+        runTests(observable, outputFile?.absolutePath)
 
     }
 
@@ -45,7 +66,7 @@ open class GTestRunner {
         private external fun initialize(context: Context, classLoader: ClassLoader)
 
         @JvmStatic
-        private external fun runTests(observable: Observable)
+        private external fun runTests(observable: Observable, absolutePath: String?)
     }
 
 }

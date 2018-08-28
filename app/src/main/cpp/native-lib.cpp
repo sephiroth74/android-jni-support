@@ -70,22 +70,29 @@ void Java_it_sephiroth_androidjnisupport_GTestRunner_initialize(JNIEnv *env,
 JNIEXPORT
 void Java_it_sephiroth_androidjnisupport_GTestRunner_runTests(JNIEnv *env,
                                                               jobject clazz,
-                                                              jobject observable) {
+                                                              jobject observable,
+                                                              jstring outputFile) {
 
     JNIGlobalRef<jobject> observableRef{observable};
 
     LOGI("runTests...");
     JNIClass<kJavaObservable>::instance().setChanged(env, observable);
 
-    new std::thread([_observable = JNIGlobalRef<jobject>(observableRef.obj())] {
+    new std::thread([_observable = JNIGlobalRef<jobject>(observableRef.obj()), _outputFile = JNIGlobalRef<jstring>(outputFile)] {
       JNIThread::set_name("gtest-thread");
       AutoDetachThread auto_thread;
 
-      sleep(2);
+      JNIStringAutoUnref outputFileString(JNI::env(), (jstring) _outputFile.obj());
+      LOGV("target output file: %s", outputFileString.c_str());
 
-      int argc[1] = {1};
+      std::string output_string = "--gtest_output=\"xml:";
+      output_string.append(outputFileString.c_str());
+      output_string.append("\"");
+
+      int argc[1] = {2};
       char **argv = new char *[*argc + 1];
       argv[0] = const_cast<char *>("--gtest_also_run_disabled_tests");
+      argv[1] = const_cast<char *>(output_string.c_str());
       ::testing::InitGoogleTest(argc, argv);
       auto result = RUN_ALL_TESTS();
       LOGV("result: %d", result);
