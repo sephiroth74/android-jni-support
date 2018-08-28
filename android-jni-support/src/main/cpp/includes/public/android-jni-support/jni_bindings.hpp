@@ -61,9 +61,9 @@ JNI_CLASS_END()
 // ----------------------------------------------------------------------------
 JNI_CLASS_BEGIN_IMPL(kJavaRuntime, "java/lang/Runtime", JNIClassTraits<kJavaObject>)
   JNI_STATIC_METHOD(getRuntime, "()Ljava/lang/Runtime;", JNIAutoUnref<jobject>)
-  JNI_METHOD(totalMemory, "()J", long)
-  JNI_METHOD(maxMemory, "()J", long)
-  JNI_METHOD(freeMemory, "()J", long)
+  JNI_METHOD(totalMemory, "()J", jlong)
+  JNI_METHOD(maxMemory, "()J", jlong)
+  JNI_METHOD(freeMemory, "()J", jlong)
   JNI_METHOD(availableProcessors, "()I", int)
 JNI_CLASS_END()
 

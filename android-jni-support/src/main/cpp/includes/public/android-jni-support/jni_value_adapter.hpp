@@ -165,10 +165,10 @@ JNI_VALUE_ADAPTER(jbyte, b);
 JNI_VALUE_ADAPTER(jchar, c);
 JNI_VALUE_ADAPTER(jshort, s);
 JNI_VALUE_ADAPTER(jint, i);
-JNI_VALUE_ADAPTER(jlong, j);
+JNI_VALUE_ADAPTER(long, j);
 
 #if TARGET_CPU_32_BIT
-JNI_VALUE_ADAPTER(long, j);
+JNI_VALUE_ADAPTER(jlong, j);
 #endif
 
 JNI_VALUE_ADAPTER(unsigned long, j);

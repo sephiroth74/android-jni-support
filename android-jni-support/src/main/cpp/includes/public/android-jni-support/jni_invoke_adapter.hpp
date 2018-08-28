@@ -328,11 +328,10 @@ jobject JNIInvokeCtorMethodSimple(JNIEnv *env,
 JNI_INVOKER(bool, Boolean)
 JNI_INVOKER(jboolean, Boolean)
 JNI_INVOKER(jint, Int)
-JNI_INVOKER(jlong, Long)
 JNI_INVOKER(jfloat, Float)
+JNI_INVOKER(long, Long)
 
 JNI_FIELD_INVOKER(jlong, Long)
-JNI_FIELD_INVOKER(std::uint32_t, Long)
 JNI_FIELD_INVOKER(std::int32_t, Int)
 JNI_FIELD_INVOKER(bool, Boolean)
 JNI_FIELD_INVOKER(jboolean, Boolean)
@@ -340,8 +339,8 @@ JNI_FIELD_INVOKER(jdouble, Double)
 JNI_FIELD_INVOKER(jfloat, Float)
 
 #if TARGET_CPU_32_BIT
-JNI_INVOKER(long, Long)
-JNI_FIELD_INVOKER(long, Long)
+JNI_INVOKER(jlong, Long)
+JNI_FIELD_INVOKER(std::int64_t, Long)
 #endif
 
 ANDROID_JNI_NAMESPACE_END_DECL

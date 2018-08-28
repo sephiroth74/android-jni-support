@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Android JNI Support</string>
+    <string name="title_activity_main">MainActivity</string>
+</resources>
