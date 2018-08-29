@@ -340,7 +340,7 @@ JNI_FIELD_INVOKER(jfloat, Float)
 
 #if TARGET_CPU_32_BIT
 JNI_INVOKER(jlong, Long)
-JNI_FIELD_INVOKER(std::int64_t, Long)
+//JNI_FIELD_INVOKER(std::int64_t, Long)
 #endif
 
 ANDROID_JNI_NAMESPACE_END_DECL
