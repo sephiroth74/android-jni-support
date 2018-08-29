@@ -52,7 +52,6 @@ TEST(TestSharedPreferences, ReadDefaults) {
     EXPECT_EQ(5545454L, prefInstance.getLong(env, preferences.obj(), "key-5", 5545454L));
 }
 
-
 TEST(TestSharedPreferences, Write) {
     LOGD("TestSharedPreferences::Write");
     EXPECT_TRUE(TestContainer::context.obj() != nullptr);
@@ -68,8 +67,6 @@ TEST(TestSharedPreferences, Write) {
     auto editor = prefInstance.edit(env, preferences.obj());
     EXPECT_TRUE(editor.obj() != nullptr);
 
-
-
     editorInstance.putBoolean(env, editor.obj(), "key-bool", true);
     editorInstance.putFloat(env, editor.obj(), "key-float", 15.5f);
     editorInstance.putInt(env, editor.obj(), "key-int", 12);
@@ -77,12 +74,42 @@ TEST(TestSharedPreferences, Write) {
     editorInstance.putString(env, editor.obj(), "key-string", "this is a test string");
     EXPECT_TRUE(editorInstance.commit(env, editor.obj()));
 
+    EXPECT_TRUE(prefInstance.contains(env, preferences.obj(), "key-bool"));
+    EXPECT_TRUE(prefInstance.contains(env, preferences.obj(), "key-float"));
+    EXPECT_TRUE(prefInstance.contains(env, preferences.obj(), "key-int"));
+    EXPECT_TRUE(prefInstance.contains(env, preferences.obj(), "key-long"));
+    EXPECT_TRUE(prefInstance.contains(env, preferences.obj(), "key-string"));
+
     EXPECT_TRUE(prefInstance.getBoolean(env, preferences.obj(), "key-bool", false));
     EXPECT_EQ(15.5f, prefInstance.getFloat(env, preferences.obj(), "key-float", 0.f));
     EXPECT_EQ(12, prefInstance.getInt(env, preferences.obj(), "key-int", 0));
     EXPECT_EQ(1234567890L, prefInstance.getLong(env, preferences.obj(), "key-long", 0L));
     EXPECT_EQ("this is a test string", prefInstance.getString(env, preferences.obj(), "key-string", ""));
+}
 
+TEST(TestSharedPreferences, Clear) {
+    LOGD("TestSharedPreferences::Clear");
+    EXPECT_TRUE(TestContainer::context.obj() != nullptr);
+
+    auto env = JNI::env();
+    auto context = TestContainer::context.obj();
+    auto &prefInstance = JNIClass<kAndroidSharedPreferences>::instance();
+    auto &editorInstance = JNIClass<kAndroidSharedPreferencesEditor>::instance();
+
+    auto preferences = JNI_INSTANCE(kAndroidContext).getSharedPreferences(env, context, "gtest", 0);
+    EXPECT_TRUE(preferences.obj() != nullptr);
+
+    auto editor = prefInstance.edit(env, preferences.obj());
+    EXPECT_TRUE(editor.obj() != nullptr);
+
+    editorInstance.clear(env, editor.obj());
+    EXPECT_TRUE(editorInstance.commit(env, editor.obj()));
+
+    EXPECT_FALSE(prefInstance.contains(env, preferences.obj(), "key-bool"));
+    EXPECT_FALSE(prefInstance.contains(env, preferences.obj(), "key-float"));
+    EXPECT_FALSE(prefInstance.contains(env, preferences.obj(), "key-int"));
+    EXPECT_FALSE(prefInstance.contains(env, preferences.obj(), "key-long"));
+    EXPECT_FALSE(prefInstance.contains(env, preferences.obj(), "key-string"));
 }
 
 }

@@ -160,6 +160,8 @@ public:
 
   const char *c_str() const;
 
+  std::string str() const;
+
   void reset();
 
   ~JNIStringAutoUnref();

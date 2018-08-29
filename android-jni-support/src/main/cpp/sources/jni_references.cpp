@@ -308,6 +308,8 @@ JNIStringAutoUnref &JNIStringAutoUnref::operator=(JNIStringAutoUnref &&o) {
 
 const char *JNIStringAutoUnref::c_str() const { return buffer_; }
 
+std::string JNIStringAutoUnref::str() const { return std::string(buffer_); }
+
 void JNIStringAutoUnref::release() {
     buffer_ = 0;
     source_ = 0;

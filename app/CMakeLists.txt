@@ -9,6 +9,8 @@ add_library(
     src/main/cpp/native-lib.cpp
     src/main/cpp/android_unittest.cc
     src/main/cpp/shared_preferences_unittest.cc
+    src/main/cpp/jni_references_unittest.cc
+    src/main/cpp/jni_context_unittest.cc
 )
 
 find_library(log-lib log)

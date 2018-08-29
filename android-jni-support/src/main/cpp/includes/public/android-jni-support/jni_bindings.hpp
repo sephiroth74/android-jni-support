@@ -140,6 +140,7 @@ JNI_CLASS_END()
 // android.content.SharedPreferences
 // ----------------------------------------------------------------------------
 JNI_CLASS_BEGIN(kAndroidSharedPreferences, "android/content/SharedPreferences")
+  JNI_METHOD(contains, "(Ljava/lang/String;)Z", bool)
   JNI_METHOD(getInt, "(Ljava/lang/String;I)I", int)
   JNI_METHOD(getString, "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;", std::string)
   JNI_METHOD(getFloat, "(Ljava/lang/String;F)F", float)
