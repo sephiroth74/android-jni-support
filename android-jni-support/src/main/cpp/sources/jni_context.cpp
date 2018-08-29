@@ -162,17 +162,18 @@ std::vector<std::string> JNIContext::get_external_cache_dirs() {
 // JNIContext::get_external_files_dirs:
 // ----------------------------------------------------------------------------
 std::vector<std::string> JNIContext::get_external_files_dirs(const char *type) {
-    assert(type);
     auto env = JNI::env();
-    auto string_type = env->NewStringUTF(type);
+    jstring typeString = nullptr;
+    if(type) typeString = env->NewStringUTF(type);
     std::vector<JNIAutoUnref<jobject>>
-        files_dirs = JNI_INSTANCE(kAndroidContextCompat).static_getExternalFilesDirs(env, JNIContext::context(), string_type);
+        files_dirs = JNI_INSTANCE(kAndroidContextCompat).static_getExternalFilesDirs(env, JNIContext::context(), typeString);
     std::vector<std::string> v;
     for (JNIAutoUnref<jobject> dir : files_dirs) {
         std::string path = JNI_INSTANCE(kJavaFile).getAbsolutePath(env, dir.obj());
         v.push_back(path.c_str());
     }
-    env->DeleteLocalRef(string_type);
+
+    if(typeString) env->DeleteLocalRef(typeString);
     return v;
 }
 
