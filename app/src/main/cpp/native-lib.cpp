@@ -82,6 +82,8 @@ void Java_it_sephiroth_androidjnisupport_GTestRunner_runTests(JNIEnv *env,
       JNIThread::set_name("gtest-thread");
       AutoDetachThread auto_thread;
 
+      sleep(3);
+
       JNIStringAutoUnref outputFileString(JNI::env(), (jstring) _outputFile.obj());
       LOGV("target output file: %s", outputFileString.c_str());
 

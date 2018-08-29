@@ -3,8 +3,12 @@ package it.sephiroth.androidjnisupport
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
+
+    val observable = Observable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,13 +19,32 @@ class MainActivity : AppCompatActivity() {
 
         val testRunner = GTestRunner(applicationContext, applicationContext.classLoader)
 
-        fab.setOnClickListener { _ ->
+        observable.addObserver { observable, any ->
             run {
-                testRunner.runAllTests()
+                when (any) {
+                    is Int -> displayResult(any)
+                }
             }
         }
 
+        button.setOnClickListener { _ ->
+            run {
+                button.text = "Running..."
+                button.isEnabled = false
 
+                textView.text = ""
+                testRunner.runAllTests(observable)
+            }
+        }
     }
+
+    fun displayResult(result: Int) {
+        runOnUiThread {
+            textView.text = "Result Code: $result"
+            button.isEnabled = true
+            button.text = getString(R.string.button_text)
+        }
+    }
+
 
 }

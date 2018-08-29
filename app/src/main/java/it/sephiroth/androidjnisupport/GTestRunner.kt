@@ -26,37 +26,19 @@ import java.util.*
 //  from Adobe.
 //
 
-open class GTestRunner {
+open class GTestRunner(context: Context, classLoader: ClassLoader) {
     var outputFile: File? = null
 
-    constructor(context: Context, classLoader: ClassLoader) {
+    init {
         val output_dir = File(context.filesDir, "gtest")
         if (!output_dir.exists()) output_dir.mkdirs()
         outputFile = File(output_dir, "test-results.xml")
         outputFile!!.createNewFile()
-
         initialize(context, classLoader)
     }
 
-    fun runAllTests() {
-        val observable = Observable()
-        observable.addObserver { _, value ->
-            Log.d("test", "observer notified with value: $value")
-
-            val input = FileInputStream(outputFile)
-            val reader = BufferedReader(InputStreamReader(input))
-            val sb = StringBuilder()
-            var line: String? = reader.readLine()
-            while (line != null) {
-                sb.append(line).append("\n")
-                Log.v("gtest", line)
-                line = reader.readLine()
-            }
-            reader.close()
-        }
-
+    fun runAllTests(observable: Observable) {
         runTests(observable, outputFile?.absolutePath)
-
     }
 
 
