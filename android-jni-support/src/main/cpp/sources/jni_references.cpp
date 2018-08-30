@@ -85,7 +85,7 @@ void JNIGlobalRefBase::delete_reference(JNIEnv *env, jobject origin) {
 JNIGlobalRefBase::JNIGlobalRefBase(JNIGlobalRefBase &&other) : JNIGlobal<jobject>() {
     auto env = JNI::env();
     obj_ = other.release();
-    assert(!ther.obj_ || env->IsSameObject(obj_, other.obj_));
+    assert(!other.obj_ || env->IsSameObject(obj_, other.obj_));
 }
 
 // copy assignment
