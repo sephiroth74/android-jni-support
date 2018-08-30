@@ -3,11 +3,10 @@
 //
 
 #include <android-jni-support/jni_references.hpp>
-//#include <android-jni-support/jni_exceptions.hpp>
 #include <android-jni-support/jni_logging.hpp>
 #include <android-jni-support/jni_env.hpp>
 
-USING_NAMESPACE_ANDROID_JNI
+ANDROID_JNI_NAMESPACE_BEGIN_DECL
 
 int JNIGlobalRefBase::active_count_ = 0;
 int JNIAutoUnrefBase::active_count_ = 0;
@@ -27,8 +26,8 @@ jobject JNIGlobal<jobject>::release() {
     return obj;
 }
 
-template<typename T>
-jobjectRefType JNIGlobal<T>::type() {
+template<>
+jobjectRefType JNIGlobal<jobject>::type() {
     jobjectRefType type = JNIInvalidRefType;
     if (obj_) {
         auto env = JNI::env();
@@ -86,7 +85,7 @@ void JNIGlobalRefBase::delete_reference(JNIEnv *env, jobject origin) {
 JNIGlobalRefBase::JNIGlobalRefBase(JNIGlobalRefBase &&other) : JNIGlobal<jobject>() {
     auto env = JNI::env();
     obj_ = other.release();
-    assert(!other.obj_ || env->IsSameObject(obj_, other.obj_));
+    assert(!ther.obj_ || env->IsSameObject(obj_, other.obj_));
 }
 
 // copy assignment
@@ -337,3 +336,5 @@ void dumpJNIReferences() {
     LOGD("JNIAutoUnrefBase = %d", JNIAutoUnrefBase::active_count());
     LOGI("********************************************************");
 }
+
+ANDROID_JNI_NAMESPACE_END_DECL

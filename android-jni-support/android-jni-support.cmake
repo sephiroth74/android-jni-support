@@ -173,19 +173,19 @@ set(LIBRARY_SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/src/main/cpp/sources)
 add_library(
     ${LIBRARY_NAME}
     STATIC
-    ${LIBRARY_SRC_DIR}/jni_logging.cpp
+    ${LIBRARY_SRC_DIR}/jni_boxed.cpp
     ${LIBRARY_SRC_DIR}/jni_context.cpp
     ${LIBRARY_SRC_DIR}/jni_env.cpp
-    ${LIBRARY_SRC_DIR}/jni_helper.cpp
-    ${LIBRARY_SRC_DIR}/jni_references.cpp
-    ${LIBRARY_SRC_DIR}/jni_thread.cpp
-    ${LIBRARY_SRC_DIR}/jni_boxed.cpp
-    ${LIBRARY_SRC_DIR}/jni_locale.cpp
-    ${LIBRARY_SRC_DIR}/jni_io.cpp
-    ${LIBRARY_SRC_DIR}/jni_shared_preferences.cpp
     ${LIBRARY_SRC_DIR}/jni_exceptions.cpp
-    ${LIBRARY_SRC_DIR}/jni_value_adapter.cpp
     ${LIBRARY_SRC_DIR}/jni_file_manager.cpp
+    ${LIBRARY_SRC_DIR}/jni_helper.cpp
+    ${LIBRARY_SRC_DIR}/jni_io.cpp
+    ${LIBRARY_SRC_DIR}/jni_locale.cpp
+    ${LIBRARY_SRC_DIR}/jni_logging.cpp
+    ${LIBRARY_SRC_DIR}/jni_references.cpp
+    ${LIBRARY_SRC_DIR}/jni_shared_preferences.cpp
+    ${LIBRARY_SRC_DIR}/jni_thread.cpp
+    ${LIBRARY_SRC_DIR}/jni_value_adapter.cpp
 )
 
 set_target_properties(
