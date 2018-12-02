@@ -161,21 +161,31 @@ struct JNIValueAdapter<std::map<std::string, std::string>> {
     };
 
 JNI_VALUE_ADAPTER(jboolean, z);
+
 JNI_VALUE_ADAPTER(jbyte, b);
+
 JNI_VALUE_ADAPTER(jchar, c);
+
 JNI_VALUE_ADAPTER(jshort, s);
+
 JNI_VALUE_ADAPTER(jint, i);
-JNI_VALUE_ADAPTER(long, j);
+
+JNI_VALUE_ADAPTER(jlong, j);
 
 #if TARGET_CPU_32_BIT
-JNI_VALUE_ADAPTER(jlong, j);
+JNI_VALUE_ADAPTER(long, j);
 #endif
 
 JNI_VALUE_ADAPTER(unsigned long, j);
+
 JNI_VALUE_ADAPTER(unsigned int, i);
+
 JNI_VALUE_ADAPTER(jfloat, f);
+
 JNI_VALUE_ADAPTER(jdouble, d);
+
 JNI_VALUE_ADAPTER(jobject, l);
+
 JNI_VALUE_ADAPTER(jstring, l);
 
 template<>

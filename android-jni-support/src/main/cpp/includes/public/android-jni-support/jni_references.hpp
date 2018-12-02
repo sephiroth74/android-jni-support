@@ -2,10 +2,10 @@
 #ifndef android_jni_support_jni_references_hpp
 #define android_jni_support_jni_references_hpp
 
-//#include <android-jni-support/jni_env.hpp>
-#include <android-jni-support/jni_helper.hpp>
-#include <android-jni-support/jni_binding_base.hpp>
+#include <android-jni-support/jni_env.hpp>
 #include <android-jni-support/jni_base_references.hpp>
+#include <android-jni-support/jni_binding_base.hpp>
+#include <android-jni-support/jni_helper.hpp>
 #include <string>
 
 ANDROID_JNI_NAMESPACE_BEGIN_DECL
@@ -13,7 +13,7 @@ ANDROID_JNI_NAMESPACE_BEGIN_DECL
 // ----------------------------------------------------------------------------
 // JNIGlobalRef<JNIBindingBase>:
 // ----------------------------------------------------------------------------
-template<typename Type = JNIBindingBase>
+template <typename Type = JNIBindingBase>
 class JNIGlobalRef : public JNIGlobalRefBase {
 public:
   JNIGlobalRef() : JNIGlobalRefBase() {}
@@ -25,11 +25,13 @@ public:
   JNIGlobalRef(JNIGlobalRef &&other) : JNIGlobalRefBase(std::move(other)) {}
 
   JNIGlobalRef &operator=(const JNIGlobalRef &o) {
-      return static_cast<JNIGlobalRef &>(JNIGlobalRefBase::operator=(std::move(o)));
+    return static_cast<JNIGlobalRef &>(
+        JNIGlobalRefBase::operator=(std::move(o)));
   }
 
   JNIGlobalRef &operator=(JNIGlobalRef &&o) {
-      return static_cast<JNIGlobalRef &>(JNIGlobalRefBase::operator=(std::move(o)));
+    return static_cast<JNIGlobalRef &>(
+        JNIGlobalRefBase::operator=(std::move(o)));
   }
 
   static JNIClass<Type> &getClass() { return JNIClass<Type>::instance(); }
@@ -38,7 +40,7 @@ public:
 // ----------------------------------------------------------------------------
 // JNILocalRef<JNIBindingBase>:
 // ----------------------------------------------------------------------------
-template<typename Type = JNIBindingBase>
+template <typename Type = JNIBindingBase>
 class JNILocalRef : public JNILocalRefBase {
 public:
   JNILocalRef() : JNILocalRefBase() {}
@@ -50,11 +52,11 @@ public:
   JNILocalRef(JNILocalRef &&other) : JNILocalRefBase(std::move(other)) {}
 
   JNILocalRef &operator=(const JNILocalRef &o) {
-      return static_cast<JNILocalRef &>(JNILocalRefBase::operator=(std::move(o)));
+    return static_cast<JNILocalRef &>(JNILocalRefBase::operator=(std::move(o)));
   }
 
   JNILocalRef &operator=(JNILocalRef &&o) {
-      return static_cast<JNILocalRef &>(JNILocalRefBase::operator=(std::move(o)));
+    return static_cast<JNILocalRef &>(JNILocalRefBase::operator=(std::move(o)));
   }
 
   static JNIClass<Type> &getClass() { return JNIClass<Type>::instance(); }
@@ -63,10 +65,9 @@ public:
 // ----------------------------------------------------------------------------
 // JNIWeakRef<JNIBindingBase>:
 // ----------------------------------------------------------------------------
-template<typename Type = JNIBindingBase>
+template <typename Type = JNIBindingBase>
 class JNIWeakRef : public JNIWeakRefBase {
 public:
-
   JNIWeakRef() : JNIWeakRefBase() {}
 
   explicit JNIWeakRef(jobject obj) : JNIWeakRefBase(obj) {}
@@ -76,39 +77,37 @@ public:
   JNIWeakRef(JNIWeakRef &&other) : JNIWeakRefBase(std::move(other)) {}
 
   JNIWeakRef &operator=(const JNIWeakRef &o) {
-      return static_cast<JNIWeakRef &>(JNIWeakRefBase::operator=(std::move(o)));
+    return static_cast<JNIWeakRef &>(JNIWeakRefBase::operator=(std::move(o)));
   }
 
   JNIWeakRef &operator=(JNIWeakRef &&o) {
-      return static_cast<JNIWeakRef &>(JNIWeakRefBase::operator=(std::move(o)));
+    return static_cast<JNIWeakRef &>(JNIWeakRefBase::operator=(std::move(o)));
   }
 
   static JNIClass<Type> &getClass() { return JNIClass<Type>::instance(); }
 
   JNILocalRef<Type> getLocal() const {
-      JNILocalRef<Type> ref;
-      ref.set(obj());
-      return ref;
+    JNILocalRef<Type> ref;
+    ref.set(obj());
+    return ref;
   }
 
   JNIGlobalRef<Type> getGlobal() const {
-      JNIGlobalRef<Type> ref;
-      ref.set(obj());
-      return ref;
+    JNIGlobalRef<Type> ref;
+    ref.set(obj());
+    return ref;
   }
 };
 
 // ----------------------------------------------------------------------------
 // JNIAutoUnref:
 // ----------------------------------------------------------------------------
-template<typename T>
-class JNIAutoUnref;
+template <typename T> class JNIAutoUnref;
 
 // ----------------------------------------------------------------------------
 // JNIAutoUnref<jobject>:
 // ----------------------------------------------------------------------------
-template<>
-class JNIAutoUnref<jobject> : public JNIAutoUnrefBase {
+template <> class JNIAutoUnref<jobject> : public JNIAutoUnrefBase {
 public:
   JNIAutoUnref(jobject obj) : JNIAutoUnrefBase(obj) {}
 };
@@ -116,20 +115,23 @@ public:
 // ----------------------------------------------------------------------------
 // JNIAutoUnref<std::string>:
 // ----------------------------------------------------------------------------
-template<>
-class JNIAutoUnref<const std::string &> : public JNIAutoUnrefBase {
+template <> class JNIAutoUnref<const std::string &> : public JNIAutoUnrefBase {
 public:
   JNIAutoUnref(JNIEnv *env, const std::string &obj)
       : JNIAutoUnrefBase(env->NewStringUTF(obj.c_str())) {}
+
+  JNIAutoUnref(const std::string obj) : JNIAutoUnref(JNI::env(), obj) {}
 };
 
 // ----------------------------------------------------------------------------
 // JNIAutoUnref<const char*>:
 // ----------------------------------------------------------------------------
-template<>
-class JNIAutoUnref<const char *> : public JNIAutoUnrefBase {
+template <> class JNIAutoUnref<const char *> : public JNIAutoUnrefBase {
 public:
-  JNIAutoUnref(JNIEnv *env, const char *obj) : JNIAutoUnrefBase(env->NewStringUTF(obj)) {}
+  JNIAutoUnref(JNIEnv *env, const char *obj)
+      : JNIAutoUnrefBase(env->NewStringUTF(obj)) {}
+
+  JNIAutoUnref(const char *obj) : JNIAutoUnref(JNI::env(), obj) {}
 };
 
 // ----------------------------------------------------------------------------
@@ -143,7 +145,8 @@ private:
 
   void release();
 
-  JNIStringAutoUnref(const char *buffer, jstring source) : buffer_(buffer), source_(source) {}
+  JNIStringAutoUnref(const char *buffer, jstring source)
+      : buffer_(buffer), source_(source) {}
 
 public:
   JNIStringAutoUnref(jstring string);
@@ -166,6 +169,11 @@ public:
 
   ~JNIStringAutoUnref();
 };
+
+// ----------------------------------------------------------------------------
+// JNIObjectAutoUnref:
+// ----------------------------------------------------------------------------
+typedef JNIAutoUnref<jobject> JNIObjectAutoUnref;
 
 void dumpJNIReferences();
 

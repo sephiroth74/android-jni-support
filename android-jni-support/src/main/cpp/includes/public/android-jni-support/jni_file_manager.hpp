@@ -17,7 +17,7 @@ public:
 
   static std::vector<std::string> get_available_files_dirs(const char *type);
 
-  static std::vector<JNIAutoUnref < jobject>> filter_available_dirs(std::vector<JNIAutoUnref < jobject>>& input);
+    static std::vector<JNIObjectAutoUnref> filter_available_dirs(std::vector<JNIObjectAutoUnref>& input);
 
 };
 

@@ -13,16 +13,17 @@ struct kJavaEnum : JNIBindingBase {};
 
 struct kJavaObject : JNIBindingBase {};
 struct kAndroidContext : JNIBindingBase {};
+struct kAndroidContextCompat : JNIBindingBase {};
 struct kAndroidClassLoader : JNIBindingBase {};
 struct kJavaRuntime : JNIBindingBase {};
 struct kAndroidRect : JNIBindingBase {};
 struct kAndroidRectF : JNIBindingBase {};
 struct kJavaBoolean : JNIBindingBase {};
 struct kJavaInteger : JNIBindingBase {};
+struct kJavaLong : JNIBindingBase {};
 struct kJavaLocale : JNIBindingBase {};
 struct kAndroidSharedPreferences : JNIBindingBase {};
 struct kAndroidSharedPreferencesEditor : JNIBindingBase {};
-struct kAndroidContextCompat : JNIBindingBase {};
 struct kJavaFile : JNIBindingBase {};
 struct kJavaHashMap : JNIBindingBase {};
 struct kAndroidEnvironment : JNIBindingBase {};
@@ -55,6 +56,18 @@ JNI_CLASS_BEGIN_IMPL(kAndroidContext, "android/content/Context", JNIClassTraits<
   JNI_METHOD(getResources, "()Landroid/content/res/Resources;", JNIAutoUnref<jobject>)
   JNI_METHOD(getClassLoader, "()Ljava/lang/ClassLoader;", JNIAutoUnref<jobject>)
   JNI_METHOD(getPackageName, "()Ljava/lang/String;", std::string)
+JNI_CLASS_END()
+
+// ----------------------------------------------------------------------------
+// androidx.core.content.ContextCompat
+// ----------------------------------------------------------------------------
+JNI_CLASS_BEGIN(kAndroidContextCompat, "androidx/core/content/ContextCompat")
+JNI_STATIC_METHOD(getExternalCacheDirs,
+                  "(Landroid/content/Context;)[Ljava/io/File;",
+                  std::vector<JNIObjectAutoUnref>)
+JNI_STATIC_METHOD(getExternalFilesDirs,
+                  "(Landroid/content/Context;Ljava/lang/String;)[Ljava/io/File;",
+                  std::vector<JNIObjectAutoUnref>)
 JNI_CLASS_END()
 
 // ----------------------------------------------------------------------------
@@ -120,6 +133,14 @@ JNI_CLASS_BEGIN_IMPL(kJavaInteger, "java/lang/Integer", JNIClassTraits<kJavaObje
 JNI_CLASS_END()
 
 // ----------------------------------------------------------------------------
+// java.lang.Long
+// ----------------------------------------------------------------------------
+JNI_CLASS_BEGIN_IMPL(kJavaLong, "java/lang/Long", JNIClassTraits<kJavaObject>)
+  JNI_STATIC_METHOD(valueOf, "(J)Ljava/lang/Long;", JNIObjectAutoUnref)
+  JNI_METHOD(longValue, "()J", long)
+JNI_CLASS_END()
+
+// ----------------------------------------------------------------------------
 // java.lang.Enum
 // ----------------------------------------------------------------------------
 JNI_CLASS_BEGIN(kJavaEnum, "java/lang/Enum")
@@ -164,18 +185,6 @@ JNI_CLASS_BEGIN(kAndroidSharedPreferencesEditor, "android/content/SharedPreferen
   JNI_METHOD(remove, "(Ljava/lang/String;)Landroid/content/SharedPreferences$Editor;", JNIAutoUnref<jobject>)
 JNI_CLASS_END()
 
-
-// ----------------------------------------------------------------------------
-// android.support.v4.content.ContextCompat
-// ----------------------------------------------------------------------------
-JNI_CLASS_BEGIN(kAndroidContextCompat, "android/support/v4/content/ContextCompat")
-  JNI_STATIC_METHOD(getExternalCacheDirs,
-                    "(Landroid/content/Context;)[Ljava/io/File;",
-                    std::vector<JNIAutoUnref<jobject>>)
-  JNI_STATIC_METHOD(getExternalFilesDirs,
-                    "(Landroid/content/Context;Ljava/lang/String;)[Ljava/io/File;",
-                    std::vector<JNIAutoUnref<jobject>>)
-JNI_CLASS_END()
 
 // ----------------------------------------------------------------------------
 // java.io.File

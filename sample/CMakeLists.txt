@@ -21,13 +21,14 @@ find_library(android-lib android)
 # android-jni-support
 # ------------------------------
 
-set(
-    ANDROID_JNI_SUPPORT_BASE_DIR
-    ${CMAKE_CURRENT_LIST_DIR}/../android-jni-support
-)
+# set(
+#     ANDROID_JNI_SUPPORT_BASE_DIR
+#     ${CMAKE_CURRENT_LIST_DIR}/../android-jni-support
+# )
 
-include(${ANDROID_JNI_SUPPORT_BASE_DIR}/android-jni-support.cmake)
+# include(${ANDROID_JNI_SUPPORT_BASE_DIR}/android-jni-support.cmake)
 
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../android-jni-support/build/android-jni-support/cmake ${CMAKE_CURRENT_BINARY_DIR}/android-jni-support)
 
 # ------------------------------
 # Google Test
@@ -53,7 +54,8 @@ target_include_directories(gtest PUBLIC ${GOOGLETEST_ROOT}/include)
 target_link_libraries(
     native-lib
     gtest
-    android-jni-support
+    # android-jni-support
+    my_library
     ${log-lib}
     ${android-lib}
 )
@@ -61,7 +63,7 @@ target_link_libraries(
 target_include_directories(
   native-lib
   PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../android-jni-support/src/main/cpp/includes/public
+  # ${CMAKE_CURRENT_LIST_DIR}/../android-jni-support/src/main/cpp/includes/public
   ${GOOGLETEST_ROOT}/include
 )
 

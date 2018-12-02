@@ -1,0 +1,31 @@
+
+cmake_minimum_required(VERSION 3.6.0)
+
+set(LIBRARY_NAME android-jni-support)
+project(${LIBRARY_NAME})
+
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/cmake)
+
+find_library(log-lib log)
+find_library(android-lib android)
+
+add_library(
+  ${LIBRARY_NAME}
+  SHARED
+  ${CMAKE_CURRENT_LIST_DIR}/src/main/cpp/sources/main.cpp
+)
+
+target_link_libraries(
+    ${LIBRARY_NAME}
+    android-jni-support-static
+    ${log-lib}
+    ${android-lib}
+    c++_shared
+)
+
+set_target_properties(
+    ${LIBRARY_NAME}
+    PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}/${ANDROID_ABI}"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}/${ANDROID_ABI}"
+)

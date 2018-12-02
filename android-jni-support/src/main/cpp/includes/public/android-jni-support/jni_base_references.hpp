@@ -3,6 +3,7 @@
 #define android_jni_support_jni_base_references_hpp
 
 #include <jni.h>
+#include <type_traits>
 #include <android-jni-support/jni_config.hpp>
 
 ANDROID_JNI_NAMESPACE_BEGIN_DECL

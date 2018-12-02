@@ -47,6 +47,12 @@ int java_boxed_to_native(jobject obj) {
 }
 
 
+template<>
+std::uint32_t java_boxed_to_native(jobject obj) {
+    auto env = JNI::env();
+    return (std::uint32_t)(JNI_INSTANCE(kJavaLong).longValue(env, obj));
+}
+
 
 // ----------------------------------------------------------------------------
 // java_enum_ordinal

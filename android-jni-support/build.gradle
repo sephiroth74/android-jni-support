@@ -2,6 +2,9 @@ apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'maven'
+apply plugin: 'signing'
+apply plugin: 'ivy-publish'
 
 android {
     compileSdkVersion 28
@@ -12,27 +15,102 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++14 -frtti -fexceptions"
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
+
+        ndk {
+        }        
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }    
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0-rc01'
+}
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+publishing {
+    publications {
+        def outputDir = file("${buildDir}/outputs/aar")
+        def myRpm = artifacts.add('archives', outputDir) {
+
+            def destFile = it.getFile()
+            def destName = "${project.name}-${VERSION_NAME}"
+            def destExtension = POM_PACKAGING
+
+            task installerArtifact(type: Tar) {
+                baseName = destName
+                destinationDir = destFile
+                extension = destExtension
+                compression = Compression.GZIP
+
+                println "destinationDir: ${destFile}"
+                println "destinationFile: ${destFile}/${destName}.${destExtension}"
+
+                from("src/main/cpp/includes") {
+                    include "**/*.h*"
+                    into "src/main/cpp/includes"
+                }
+
+                from("cmake") {
+                    include "CMakelists-distribution.txt"
+                    rename { 'CMakelists.txt' }
+                    into "cmake"
+                }   
+
+                from("cmake") {
+                    include "android-jni-support.cmake"
+                    into "cmake"
+                }   
+
+                from("lib") {
+                    include "**/*.a"
+                    include "**/*.so"
+                    into "lib"
+                }
+
+                doLast {
+                }
+            }
+
+            builtBy installerArtifact
+        }
+
+        myPublication(IvyPublication) {
+            artifact myRpm
+            revision "revision"
+            module POM_ARTIFACT_ID
+            organisation GROUP
+        }        
+    }
+
+    repositories {
+        ivy { url "${buildDir}/local-repository" }
+    }
 }
-repositories {
-    mavenCentral()
+
+
+publishing {
+  repositories {
+    maven {
+      url "${buildDir}/local-repository"
+    }
+  }
 }
+
+publish.dependsOn("assembleRelease")

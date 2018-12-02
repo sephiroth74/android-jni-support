@@ -2,10 +2,6 @@ package it.sephiroth.androidjnisupport;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.test.espresso.Espresso;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
@@ -13,17 +9,20 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import androidx.test.espresso.Espresso;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
 import it.sephiroth.androidjnisupport.condition_matcher.ConditionWatcher;
 import it.sephiroth.androidjnisupport.condition_matcher.Instruction;
 
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith (AndroidJUnit4.class)
 public class GTestInstrumented {
-    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class, true, true);
+    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule(MainActivity.class, true, true);
 
     @Before
     public void setUp() {

@@ -1,7 +1,4 @@
 
-cmake_minimum_required(VERSION 3.4.1)
-
-set(LIBRARY_NAME android-jni-support)
 
 if("${ANDROID_ABI}" STREQUAL "x86_64")
   set(TARGET_CPU_X86    0)
@@ -167,55 +164,3 @@ set(SHAREDLIBS_CXX_FLAGS
   ${SHAREDLIBS_CFLAGS}
 )
 
-set(LIBRARY_SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/src/main/cpp/sources)
-
-
-add_library(
-    ${LIBRARY_NAME}
-    STATIC
-    ${LIBRARY_SRC_DIR}/jni_boxed.cpp
-    ${LIBRARY_SRC_DIR}/jni_context.cpp
-    ${LIBRARY_SRC_DIR}/jni_env.cpp
-    ${LIBRARY_SRC_DIR}/jni_exceptions.cpp
-    ${LIBRARY_SRC_DIR}/jni_file_manager.cpp
-    ${LIBRARY_SRC_DIR}/jni_helper.cpp
-    ${LIBRARY_SRC_DIR}/jni_io.cpp
-    ${LIBRARY_SRC_DIR}/jni_locale.cpp
-    ${LIBRARY_SRC_DIR}/jni_logging.cpp
-    ${LIBRARY_SRC_DIR}/jni_references.cpp
-    ${LIBRARY_SRC_DIR}/jni_shared_preferences.cpp
-    ${LIBRARY_SRC_DIR}/jni_thread.cpp
-    ${LIBRARY_SRC_DIR}/jni_value_adapter.cpp
-)
-
-set_target_properties(
-    ${LIBRARY_NAME}
-    PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}/${ANDROID_ABI}"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/lib/${CMAKE_BUILD_TYPE}/${ANDROID_ABI}"
-)
-
-
-target_include_directories(
-  ${LIBRARY_NAME}
-  PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/src/main/cpp/includes/public
-)
-
-target_compile_options(
-  ${LIBRARY_NAME}
-  PUBLIC
-  ${SHAREDLIBS_CFLAGS}
-)
-
-
-find_library(log-lib log)
-find_library(android-lib android)
-
-
-target_link_libraries(
-    ${LIBRARY_NAME}
-    ${log-lib}
-    ${android-lib}
-    c++_shared
-)

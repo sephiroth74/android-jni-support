@@ -18,7 +18,7 @@ std::vector<std::string> jstringArrayToVector(JNIEnv* env, jobjectArray stringAr
 /**
  * Auto convert a java Object[] into a std::vector<JNIObjectAutoUnref>
  */
-std::vector<JNIAutoUnref<jobject>> jobjectArrayToVector(JNIEnv* env, jobjectArray objectArray);
+std::vector<JNIObjectAutoUnref> jobjectArrayToVector(JNIEnv* env, jobjectArray objectArray);
 
 ANDROID_JNI_NAMESPACE_END_DECL
 
