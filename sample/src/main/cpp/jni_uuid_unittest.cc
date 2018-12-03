@@ -10,14 +10,14 @@ USING_NAMESPACE_ANDROID_JNI
 
 namespace {
 
-TEST(JniUtilsTest, TestUUIDGeneration) {
-    LOGD("JniUtilsTest::TestUUIDGeneration");
+TEST(JniUUIDTest, TestUUIDGeneration) {
+    LOGD("JniUUIDTest::TestUUIDGeneration");
 
     auto env = JNI::env();
     EXPECT_TRUE(env != nullptr);
 
     std::string uuid;
-    JNIUtils::generate_uuid(uuid);
+    JNIUUID::generate_uuid(uuid);
 
     LOGV("uuid: %s, size: %lu", uuid.c_str(), uuid.size());
 

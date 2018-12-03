@@ -1,1 +1,2 @@
-include ':sample', ':android-jni-support'
+include ':sample'
+include ':android-jni-support'

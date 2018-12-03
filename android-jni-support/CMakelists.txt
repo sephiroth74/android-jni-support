@@ -16,6 +16,8 @@ add_library(
   ${CMAKE_CURRENT_LIST_DIR}/src/main/cpp/sources/main.cpp
 )
 
+add_library(androidjnisupport::lib ALIAS android-jni-support)
+
 target_link_libraries(
     ${LIBRARY_NAME}
     android-jni-support-static

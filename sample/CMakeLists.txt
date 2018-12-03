@@ -1,5 +1,9 @@
 
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.6.0)
+
+project(native-lib)
+
+set(CMAKE_VERBOSE_MAKEFILE on)
 
 string(TOLOWER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE_LOWERCASE)
 
@@ -11,27 +15,22 @@ add_library(
     src/main/cpp/shared_preferences_unittest.cc
     src/main/cpp/jni_references_unittest.cc
     src/main/cpp/jni_context_unittest.cc
-    src/main/cpp/jni_utils_unittest.cc
+    src/main/cpp/jni_uuid_unittest.cc
 )
 
 find_library(log-lib log)
 find_library(android-lib android)
 
 
-# ------------------------------
-# android-jni-support
-# ------------------------------
+# Based on passed parameters, include the correct library folder
+if(DEFINED CMAKE_LIB_DIR)
+  message("CMAKE FOLDER: ${CMAKE_LIB_DIR}")
+  add_subdirectory(${CMAKE_LIB_DIR}/cmake)
+else()
+  message("CMAKE FOLDER: not defined")
+  add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../android-jni-support ${CMAKE_CURRENT_BINARY_DIR}/android-jni-support)
+endif()
 
-# set(
-#     ANDROID_JNI_SUPPORT_BASE_DIR
-#     ${CMAKE_CURRENT_LIST_DIR}/../android-jni-support
-# )
-
-# include(${ANDROID_JNI_SUPPORT_BASE_DIR}/android-jni-support.cmake)
-
-# add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../android-jni-support/build/android-jni-support/cmake ${CMAKE_CURRENT_BINARY_DIR}/android-jni-support)
-
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../android-jni-support ${CMAKE_CURRENT_BINARY_DIR}/android-jni-support)
 
 # ------------------------------
 # Google Test
@@ -57,8 +56,7 @@ target_include_directories(gtest PUBLIC ${GOOGLETEST_ROOT}/include)
 target_link_libraries(
     native-lib
     gtest
-    android-jni-support
-    # my_library
+    androidjnisupport::lib
     ${log-lib}
     ${android-lib}
 )
@@ -66,7 +64,6 @@ target_link_libraries(
 target_include_directories(
   native-lib
   PUBLIC
-  # ${CMAKE_CURRENT_LIST_DIR}/../android-jni-support/src/main/cpp/includes/public
   ${GOOGLETEST_ROOT}/include
 )
 

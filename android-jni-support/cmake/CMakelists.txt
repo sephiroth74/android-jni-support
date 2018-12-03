@@ -25,7 +25,7 @@ set(
   ${LIBRARY_SRC_DIR}/jni_shared_preferences.cpp
   ${LIBRARY_SRC_DIR}/jni_thread.cpp
   ${LIBRARY_SRC_DIR}/jni_value_adapter.cpp  
-  ${LIBRARY_SRC_DIR}/jni_utils.cpp  
+  ${LIBRARY_SRC_DIR}/jni_uuid.cpp  
 )
 
 add_library(

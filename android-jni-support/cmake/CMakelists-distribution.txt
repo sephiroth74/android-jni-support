@@ -2,37 +2,34 @@
 cmake_minimum_required(VERSION 3.6.0)
 include(${CMAKE_CURRENT_LIST_DIR}/android-jni-support.cmake)
 
-LIB_FILE = ${CMAKE_CURRENT_LIST_DIR}/../lib/${CMAKE_BUILD_TYPE}/${ANDROID_ABI}/libandroid-jni-support-static.a
-LIB_NAME = "android-jni-support-static"
+set(LIB_FILE ${CMAKE_CURRENT_LIST_DIR}/../libs/android-jni-support-static/${CMAKE_BUILD_TYPE}/${ANDROID_ABI}/libandroid-jni-support-static.a)
+set(LIB_NAME "android-jni-support-static")
 
-if(EXISTS ${LIB_FILE})
-  get_filename_component(LIB_FILENAME ${LIB_FILE} REALPATH)
-  add_library(${LIB_NAME} STATIC IMPORTED)
-  set_target_properties(${LIB_NAME} PROPERTIES IMPORTED_LOCATION ${LIB_FILENAME})
-  message(STATUS "[static] Linking [${LIB_NAME}]: ${LIB_FILENAME}")
-else()
-  message(FATAL_ERROR "${LIB_FILE} not found")
-endif()
+set(UUID_LIB_FILE ${CMAKE_CURRENT_LIST_DIR}/../libs/uuid/${CMAKE_BUILD_TYPE}/${ANDROID_ABI}/libuuid.a)
+set(UUID_LIB_NAME "uuid")
 
-add_library(android-jni-support INTERFACE)
-add_library(androidjnisupport::lib  ALIAS android-jni-support)
+LinkExternalStaticLibrary(${LIB_NAME} ${LIB_FILE})
+LinkExternalStaticLibrary(${UUID_LIB_NAME} ${UUID_LIB_FILE})
 
-target_link_libraries(android-jni-support INTERFACE android-jni-support-static)
+add_library(android-jni-support-lib INTERFACE)
+add_library(androidjnisupport::lib  ALIAS android-jni-support-lib)
+
+target_link_libraries(android-jni-support-lib INTERFACE android-jni-support-static uuid)
 
 target_include_directories(
-  android-jni-support
+  android-jni-support-lib
   INTERFACE
   ${CMAKE_CURRENT_LIST_DIR}/../src/main/cpp/includes/public
 )
 
 target_compile_options(
-  android-jni-support
+  android-jni-support-lib
   INTERFACE
   ${SHAREDLIBS_CFLAGS}
 )
 
 set_target_properties(
-  android-jni-support
+  android-jni-support-lib
   PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES 
   ${CMAKE_CURRENT_LIST_DIR}/../src/main/cpp/includes/public

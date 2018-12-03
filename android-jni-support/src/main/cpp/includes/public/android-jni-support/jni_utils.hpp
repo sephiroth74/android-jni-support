@@ -1,7 +1,6 @@
 #ifndef android_jni_support_jni_utils_hpp
 
 #include <android-jni-support/jni_env.hpp>
-#include <string.h>
 
 ANDROID_JNI_NAMESPACE_BEGIN_DECL
 
@@ -25,10 +24,6 @@ ANDROID_JNI_NAMESPACE_BEGIN_DECL
 
 #define JNI_ASSERT(...) JNI_ASSERT_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
 
-class JNIUtils {
-public:
-  static void generate_uuid(std::string &out);
-};
 
 ANDROID_JNI_NAMESPACE_END_DECL
 

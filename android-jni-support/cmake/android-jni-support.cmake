@@ -1,5 +1,19 @@
 
 
+# Link a static library to the project
+
+function(LinkExternalStaticLibrary lib_name lib_file)
+  if(EXISTS ${lib_file})
+    get_filename_component(LIB_FILENAME ${lib_file} REALPATH)
+    add_library(${lib_name} STATIC IMPORTED)
+    set_target_properties(${lib_name} PROPERTIES IMPORTED_LOCATION ${LIB_FILENAME})
+    message(STATUS "[static] Linking [${lib_name}]: ${LIB_FILENAME}")
+  else()
+    message(FATAL_ERROR "${lib_file} not found")
+  endif()
+endfunction()
+
+
 if("${ANDROID_ABI}" STREQUAL "x86_64")
   set(TARGET_CPU_X86    0)
   set(TARGET_CPU_X86_64 1)

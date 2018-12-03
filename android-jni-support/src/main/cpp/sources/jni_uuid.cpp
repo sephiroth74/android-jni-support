@@ -2,7 +2,7 @@
 // Created by Alessandro Crugnola
 //
 
-#include <android-jni-support/jni_utils.hpp>
+#include <android-jni-support/jni_uuid.hpp>
 #include <android-jni-support/jni_logging.hpp>
 
 #include <map>
@@ -14,9 +14,9 @@
 USING_NAMESPACE_ANDROID_JNI
 
 // ----------------------------------------------------------------------------
-// JNIUtils:generate_uuid
+// JNIUUID:generate_uuid
 // ----------------------------------------------------------------------------
-void JNIUtils::generate_uuid(std::string &out) {
+void JNIUUID::generate_uuid(std::string &out) {
     char uuid_str[37];
     uuid_t uuid;
     uuid_generate_time(uuid);

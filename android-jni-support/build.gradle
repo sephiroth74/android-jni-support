@@ -2,9 +2,6 @@ apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'maven'
-apply plugin: 'signing'
-apply plugin: 'ivy-publish'
 
 android {
     compileSdkVersion 28
@@ -43,29 +40,60 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
+apply plugin: 'maven'
+apply plugin: 'signing'
+apply plugin: 'ivy-publish'
+apply plugin: 'maven-publish'
 
-publishing {
-    publications {
-        def outputDir = file("${buildDir}/outputs/aar")
-        def myRpm = artifacts.add('archives', outputDir) {
+def isReleaseBuild() {
+    return VERSION_NAME.contains("SNAPSHOT") == false
+}
+
+def getReleaseRepositoryUrl() {
+    return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
+            : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+}
+
+def getSnapshotRepositoryUrl() {
+    return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
+            : "https://oss.sonatype.org/content/repositories/snapshots/"
+}
+
+def getRepositoryUsername() {
+    return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : ""
+}
+
+def getRepositoryPassword() {
+    return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
+}
+
+
+        def outputFile = file("${buildDir}/outputs/aar/${project.name}-${VERSION_NAME}.${POM_PACKAGING}")
+        def myRpm = artifacts.add('archives', outputFile) {
+            type('zip')
 
             def destFile = it.getFile()
-            def destName = "${project.name}-${VERSION_NAME}"
-            def destExtension = POM_PACKAGING
+            def destName = it.getName()
+            def destExtension = it.getExtension()
+            def destDir = destFile.getParentFile()
 
-            task installerArtifact(type: Tar) {
+            task installerArtifact(type: Zip) {
                 baseName = destName
-                destinationDir = destFile
+                destinationDir = destDir
                 extension = destExtension
-                compression = Compression.GZIP
 
-                println "destinationDir: ${destFile}"
-                println "destinationFile: ${destFile}/${destName}.${destExtension}"
+                println "destinationDir: ${destDir}"
+                println "destinationFile: ${destDir}/${destName}.${destExtension}"
 
                 from("src/main/cpp/includes") {
                     include "**/*.h*"
                     into "src/main/cpp/includes"
                 }
+
+                from("third-party-libs/uuid") {
+                    include "uuid.h"
+                    into "src/main/cpp/includes/public/uuid"
+                }                
 
                 from("cmake") {
                     include "CMakelists-distribution.txt"
@@ -79,38 +107,103 @@ publishing {
                 }   
 
                 from("lib") {
-                    include "**/*.a"
-                    include "**/*.so"
-                    into "lib"
+                    include "**/libandroid-jni-support-static.a"
+                    include "**/libuuid.a"
+                    into "libs/android-jni-support-static"
                 }
 
-                doLast {
-                }
+                from("third-party-libs/uuid/lib") {
+                    include "**/libuuid.a"
+                    into "libs/uuid"
+                }                
+
             }
 
             builtBy installerArtifact
         }
 
-        myPublication(IvyPublication) {
-            artifact myRpm
-            revision "revision"
-            module POM_ARTIFACT_ID
-            organisation GROUP
-        }        
-    }
-
-    repositories {
-        ivy { url "${buildDir}/local-repository" }
-    }
-}
-
-
 publishing {
-  repositories {
-    maven {
-      url "${buildDir}/local-repository"
+    repositories {
+        maven {
+            name 'Sonatype'
+            url isReleaseBuild() ? getReleaseRepositoryUrl() : getSnapshotRepositoryUrl()
+            credentials {
+                username getRepositoryUsername()
+                password getRepositoryPassword()
+            }
+        }
     }
-  }
+
+    publications {
+        artifactoryPublications(MavenPublication) {
+            artifact myRpm
+            groupId GROUP
+            artifactId POM_ARTIFACT_ID
+            version VERSION_NAME
+        }
+    }
 }
+
+
+
+// signing {
+//     sign configurations.archives
+// }
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            pom.groupId = GROUP
+            pom.artifactId = POM_ARTIFACT_ID
+            pom.version = VERSION_NAME
+
+            repository(url: getReleaseRepositoryUrl()) {
+                authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+            }
+
+            snapshotRepository(url: getSnapshotRepositoryUrl()) {
+                authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+            }
+
+            pom.project {
+                name POM_NAME
+                packaging POM_PACKAGING
+                description POM_DESCRIPTION
+                url POM_URL
+
+                scm {
+                    url POM_SCM_URL
+                    connection POM_SCM_CONNECTION
+                    developerConnection POM_SCM_DEV_CONNECTION
+                }
+
+                licenses {
+                    license {
+                        name POM_LICENCE_NAME
+                        url POM_LICENCE_URL
+                        distribution POM_LICENCE_DIST
+                    }
+                }
+
+                developers {
+                    developer {
+                        id POM_DEVELOPER_ID
+                        name POM_DEVELOPER_NAME
+                        email POM_DEVELOPER_EMAIL
+                        url POM_DEVELOPER_URL
+                        roles {
+                            role POM_DEVELOPER_ROLE
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+        
+
 
 publish.dependsOn("assembleRelease")
+

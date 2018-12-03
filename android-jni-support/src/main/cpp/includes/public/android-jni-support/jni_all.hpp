@@ -11,4 +11,5 @@
 #include <android-jni-support/jni_references.hpp>
 #include <android-jni-support/jni_thread.hpp>
 #include <android-jni-support/jni_utils.hpp>
+#include <android-jni-support/jni_uuid.hpp>
 #include <android-jni-support/jni_file_manager.hpp>
