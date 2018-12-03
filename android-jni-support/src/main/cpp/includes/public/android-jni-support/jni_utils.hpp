@@ -1,6 +1,7 @@
 #ifndef android_jni_support_jni_utils_hpp
 
 #include <android-jni-support/jni_env.hpp>
+#include <string.h>
 
 ANDROID_JNI_NAMESPACE_BEGIN_DECL
 
@@ -26,15 +27,7 @@ ANDROID_JNI_NAMESPACE_BEGIN_DECL
 
 class JNIUtils {
 public:
-  static void generate_uuid(std::string &out) {
-    // char uuid_str[37];
-    // uuid_t uuid;
-    // uuid_generate_time_safe(uuid);
-    // uuid_unparse_lower(uuid, uuid_str);
-
-    // out.assign(uuid_str);
-    // uuid_clear(uuid);
-  }
+  static void generate_uuid(std::string &out);
 };
 
 ANDROID_JNI_NAMESPACE_END_DECL
