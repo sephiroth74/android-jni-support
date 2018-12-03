@@ -5,6 +5,7 @@ set(LIBRARY_NAME android-jni-support)
 project(${LIBRARY_NAME})
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/cmake)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/third-party-libs/uuid)
 
 find_library(log-lib log)
 find_library(android-lib android)
@@ -18,6 +19,7 @@ add_library(
 target_link_libraries(
     ${LIBRARY_NAME}
     android-jni-support-static
+    uuid
     ${log-lib}
     ${android-lib}
     c++_shared

@@ -9,6 +9,7 @@
 #include <sstream>
 #include <stdio.h>
 #include <unistd.h>
+#include <uuid/uuid.h>
 
 USING_NAMESPACE_ANDROID_JNI
 
@@ -16,18 +17,11 @@ USING_NAMESPACE_ANDROID_JNI
 // JNIUtils:generate_uuid
 // ----------------------------------------------------------------------------
 void JNIUtils::generate_uuid(std::string &out) {
-    FILE *fp;
-    char buffer[38];
+    char uuid_str[37];
+    uuid_t uuid;
+    uuid_generate_time(uuid);
+    uuid_unparse_lower(uuid, uuid_str);
 
-    fp = popen("cat /proc/sys/kernel/random/uuid", "r");
-    if (fp != NULL) {
-        if (fgets(buffer, 37, fp) != NULL)
-            printf("%s", buffer);
-        pclose(fp);
-    } else {
-        LOGE("cannot open uuid process");
-    }
-
-    buffer[37] = '\0';
-    out.assign(buffer);
+    out.assign(uuid_str);
+    uuid_clear(uuid);    
 }
