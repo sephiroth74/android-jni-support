@@ -22,14 +22,12 @@ android {
             }
         }
 
-        ndk {
-//            abiFilters 'x86'
-        }
+        ndk { }
     }
 
     sourceSets {
         main {
-            jniLibs.srcDirs = ['../android-jni-support/lib']
+            // jniLibs.srcDirs = ['../android-jni-support/lib']
         }
     }
 
