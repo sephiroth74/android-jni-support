@@ -56,7 +56,6 @@ target_include_directories(gtest PUBLIC ${GOOGLETEST_ROOT}/include)
 target_link_libraries(
     native-lib
     gtest
-    androidjnisupport::lib
     ${log-lib}
     ${android-lib}
 )
@@ -76,3 +75,6 @@ target_compile_options(
   -Wno-undefined-var-template
   -Wno-inaccessible-base
 )
+
+find_package(cdep-dependencies REQUIRED)
+add_all_cdep_dependencies(native-lib)

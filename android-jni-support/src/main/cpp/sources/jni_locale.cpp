@@ -22,7 +22,7 @@ JNILocale &JNILocale::default_locale() {
     std::lock_guard<std::mutex> lock(mutex_);
     static bool initialized = false;
     if (!initialized) {
-        JNI_ASSERT(JNI::vm(), "jni", "vm not set");
+        JNI_ASSERT_COND(JNI::vm(), "jni", "vm not set");
 
         auto locale =
             JNI_INSTANCE(kJavaLocale).static_getDefault(JNI::env());

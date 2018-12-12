@@ -17,7 +17,7 @@ static JavaVM *vm_ = nullptr;
 std::mutex mutex_;
 
 #define THROW_IF_NOT_INITIALIZED \
-    JNI_ASSERT(JNI::initialized(), LOG_TAG, "vm not set")
+    JNI_ASSERT_COND(JNI::initialized(), LOG_TAG, "vm not set")
 
 // ----------------------------------------------------------------------------
 // JNI::initialized:

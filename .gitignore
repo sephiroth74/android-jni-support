@@ -67,3 +67,4 @@ fastlane/readme.md
 android-jni-support/lib
 .cxx/*
 android-jni-support/third-party-libs/uuid/lib
+android-jni-support/.cdep

@@ -24,7 +24,6 @@ target_link_libraries(
     uuid
     ${log-lib}
     ${android-lib}
-    c++_shared
 )
 
 set_target_properties(

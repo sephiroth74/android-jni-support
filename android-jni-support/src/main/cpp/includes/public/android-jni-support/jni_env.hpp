@@ -7,7 +7,7 @@
 #include <android-jni-support/jni_config.hpp>
 #include <android/log.h>
 
-#define JNI_ASSERT(_cond, tag, ...) if (!_cond) __android_log_assert("conditional", tag, __VA_ARGS__)
+#define JNI_ASSERT_COND(_cond, tag, ...) if (!_cond) __android_log_assert("conditional", tag, __VA_ARGS__)
 
 ANDROID_JNI_NAMESPACE_BEGIN_DECL
 

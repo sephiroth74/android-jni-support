@@ -1,0 +1,4 @@
+builders: [cmake]
+
+dependencies:
+- compile: com.github.sephiroth74:android-jni-support:0.0.0
