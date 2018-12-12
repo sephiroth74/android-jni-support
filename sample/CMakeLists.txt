@@ -22,16 +22,6 @@ find_library(log-lib log)
 find_library(android-lib android)
 
 
-# Based on passed parameters, include the correct library folder
-if(DEFINED CMAKE_LIB_DIR)
-  message("CMAKE FOLDER: ${CMAKE_LIB_DIR}")
-  add_subdirectory(${CMAKE_LIB_DIR}/cmake)
-else()
-  message("CMAKE FOLDER: not defined")
-  add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../android-jni-support ${CMAKE_CURRENT_BINARY_DIR}/android-jni-support)
-endif()
-
-
 # ------------------------------
 # Google Test
 # ------------------------------
